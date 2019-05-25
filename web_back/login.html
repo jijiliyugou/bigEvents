@@ -9,6 +9,7 @@
     <link rel="stylesheet" type="text/css" href="css/reset.css">
     <link rel="stylesheet" type="text/css" href="css/iconfont.css">
     <link rel="stylesheet" type="text/css" href="css/main.css">
+    <link rel="stylesheet" href="./js/bootstrap/css/bootstrap.min.css">
 </head>
 
 <body>
@@ -30,9 +31,26 @@
         </div>
 
     </div>
+    <!-- Modal -->
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel">提示框</h4>
+                </div>
+                <div class="modal-body">
 
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                </div>
+            </div>
+        </div>
+    </div>
 </body>
 <script src="./js/jquery-1.12.4.min.js"></script>
+<script src="./js/bootstrap/js/bootstrap.min.js"></script>
 <script>
     // 1. 为登录按钮绑定点击事件
     // 2. 获取用户名 和 密码
@@ -52,9 +70,11 @@
             var user_name = $('.input_txt').val().trim()
             var password = $('.input_pass').val().trim()
             if (user_name == '' || password == '') {
-                alert('胸die，没数内容呢，想啥呢')
+                $('.modal-body').text('胸die，没有内容呢，想啥呢！！！')
+                $('#myModal').modal()
                 return;
             }
+
             $.ajax({
                 url: 'https://autumnfish.cn/big/admin/login',
                 type: 'post',
@@ -64,7 +84,8 @@
                 },
                 success: function(backData) {
                     if (backData.code == 400) {
-                        alert('哥们，你错了')
+                        $('.modal-body').text('胸die，账户或密码错了呢！！！')
+                        $('#myModal').modal()
                     } else if (backData.code == 200) {
                         window.location.href = "./index.html"
                     }
