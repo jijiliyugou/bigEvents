@@ -19,7 +19,7 @@
         <a href="#" class="logo"><img src="images/logo02.png" alt="logo"></a>
         <div class="user_info">
             <img src="images/2.jpg" alt="person">
-            <span>欢迎&nbsp;&nbsp;李思思</span>
+            <span>欢迎&nbsp;&nbsp;<b class="userName">李思思</b></span>
             <b>管理员</b>
         </div>
         <div class="menu">
@@ -148,7 +148,24 @@
             });
         });
     </script>
-
+    //自己的JS====================================>>
+    <script>
+        $(function() {
+            function getData() {
+                $.ajax({
+                    url: 'https://autumnfish.cn/big32/admin/getuser',
+                    type: "get",
+                    success: function(backData) {
+                        console.log(backData);
+                        $('.userName').text(backData.data.nickname)
+                        $('.user_info img').attr('src', backData.data.user_pic)
+                        $('.user_center_link img').attr('src', backData.data.user_pic)
+                    }
+                })
+            };
+            getData()
+        });
+    </script>
 </body>
 
 </html>
