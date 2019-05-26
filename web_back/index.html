@@ -151,19 +151,16 @@
     //自己的JS====================================>>
     <script>
         $(function() {
-            function getData() {
-                $.ajax({
-                    url: 'https://autumnfish.cn/big32/admin/getuser',
-                    type: "get",
-                    success: function(backData) {
-                        console.log(backData);
-                        $('.userName').text(backData.data.nickname)
-                        $('.user_info img').attr('src', backData.data.user_pic)
-                        $('.user_center_link img').attr('src', backData.data.user_pic)
-                    }
-                })
-            };
-            getData()
+            $.ajax({
+                url: 'https://autumnfish.cn/big32/admin/getuser',
+                type: "get",
+                success: function(backData) {
+                    console.log(backData);
+                    $('.userName').text(backData.data.nickname)
+                    $('.user_info img').attr('src', backData.data.user_pic)
+                    $('.user_center_link img').attr('src', backData.data.user_pic)
+                }
+            })
         });
     </script>
 </body>
