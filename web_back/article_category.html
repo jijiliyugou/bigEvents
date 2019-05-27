@@ -110,7 +110,7 @@
             <td>{{$value.slug}}</td>
             <td class="text-center">
                 <a href="javascript:editTr({&quot;id&quot;:&quot;4&quot;,&quot;slug&quot;:&quot;travel&quot;,&quot;name&quot;:&quot;爱旅行&quot;});" class="btn btn-info btn-xs">编辑</a>
-                <a href="javascript:deleteTr( 4 );" class="btn btn-danger btn-xs">删除</a>
+                <a href="javascript:deleteTr( {{$value.id}} );" class="btn btn-danger btn-xs">删除</a>
             </td>
         </tr>
         {{/each}}
@@ -136,48 +136,66 @@
         })
 
         //自己写的JS====================================================================>>
+        //删除文章类别管理
+        function deleteTr(id) {
+            $.ajax({
+                url: 'http://localhost:8000/admin/category_delete',
+                type: "post",
+                // <a href="javascript:editTr({&quot;id&quot;:&quot;4&quot;,&quot;slug&quot;:&quot;travel&quot;,&quot;name&quot;:&quot;爱旅行&quot;});" class="btn btn-info btn-xs">编辑</a>
+                data: {
+                    id: id
+                },
+                success: function(backData) {
+                    if (backData.code == 200) {
+                        getArticle()
+                    }
+                }
+            })
+
+        }
+
+
         //请求地址：<http://localhost:8000/admin/category_search>
         //请求方式：get
-        $(function() {
-            function getArticle() {
-                $.ajax({
-                    url: 'http://localhost:8000/admin/category_search',
-                    type: 'get',
-                    success: function(backData) {
-                        console.log(backData);
-                        var html = template('temp', backData)
-                        $('tbody').html(html)
-                    }
-                })
-            };
-            // 新增分类
-            // 请求地址：http://localhost:8000/admin/category_add
-            // 请求方式：post
-            // 请求参数：
-            // 步骤
-            // 1. 点击新增按钮 弹出新增框
-            // 2. 新增框中输入 name和slug
-            // 1. 点击取消 关闭
-            // 2. 点击新增  
-            //     1. 获取数据
-            //     2. 调用接口
-            //     3. 响应回来之后
-            getArticle();
-            $('.btn-primary').click(function() {
-                $.ajax({
-                    url: "http://localhost:8000/admin/category_add",
-                    type: "post",
-                    data: {
-                        name: $('.cate_name').val(),
-                        slug: $('.cate_slug').val()
-                    },
-                    success: function(backData) {
-                        $('#addModal').modal('hide');
-                        getArticle();
-                    }
-                })
 
-            });
+        function getArticle() {
+            $.ajax({
+                url: 'http://localhost:8000/admin/category_search',
+                type: 'get',
+                success: function(backData) {
+                    console.log(backData);
+                    var html = template('temp', backData)
+                    $('tbody').html(html)
+                }
+            })
+        };
+        // 新增分类
+        // 请求地址：http://localhost:8000/admin/category_add
+        // 请求方式：post
+        // 请求参数：
+        // 步骤
+        // 1. 点击新增按钮 弹出新增框
+        // 2. 新增框中输入 name和slug
+        // 1. 点击取消 关闭
+        // 2. 点击新增  
+        //     1. 获取数据
+        //     2. 调用接口
+        //     3. 响应回来之后
+        getArticle();
+        $('.btn-primary').click(function() {
+            $.ajax({
+                url: "http://localhost:8000/admin/category_add",
+                type: "post",
+                data: {
+                    name: $('.cate_name').val(),
+                    slug: $('.cate_slug').val()
+                },
+                success: function(backData) {
+                    $('#addModal').modal('hide');
+                    getArticle();
+                }
+            })
+
         });
     </script>
 
