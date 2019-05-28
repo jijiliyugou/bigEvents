@@ -24,12 +24,12 @@
                 <div class="col-xs-6">
                     <form class="form-inline">
                         <select id="selCategory" name="" class="form-control input-sm">
-                            <option>所有分类</option>
+                            <option value="">所有分类</option>
                         </select>
                         <select id="selStatus" name="" class="form-control input-sm">
-                            <option>所有状态</option>
-                            <option value="drafted">草稿</option>
-                            <option value="published">已发布</option>
+                            <option value="">所有状态</option>
+                            <option value="草稿">草稿</option>
+                            <option value="已发布">已发布</option>
                         </select>
                         <button id="btnSearch" class="btn btn-default btn-sm">筛选</button>
                     </form>
@@ -267,7 +267,7 @@
     <script src="./js/template-web.js"></script>
     <script type="text/html" id="temp">
         {{each data v}}
-        <option>{{v.name}}</option>
+        <option value="{{v.id}}">{{v.name}}</option>
         {{/each}}
     </script>
     <script type="text/html" id="tempData">
@@ -314,13 +314,15 @@
             // 3. 数据回来之后渲染到页面上 模板引擎
             var myPage = 1;
 
-            function getArticle(myPage) {
+            function getArticle() {
                 $.ajax({
                     url: "http://localhost:8000/admin/search",
                     type: 'get',
                     data: {
                         page: myPage,
-                        perpage: 5
+                        perpage: 5,
+                        type: $('#selCategory').val(),
+                        state: $('#selStatus').val()
                     },
                     success: function(backData) {
                         console.log(backData);
@@ -329,7 +331,7 @@
                     }
                 })
             }
-            getArticle(myPage)
+            getArticle()
 
 
             $('.pagination').twbsPagination({
@@ -347,6 +349,12 @@
 
                 }
             });
+
+            //筛选设置
+            $('#btnSearch').click(function(e) {
+                e.preventDefault();
+                getArticle()
+            })
         });
     </script>
 
