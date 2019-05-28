@@ -11,6 +11,7 @@
     <link rel="stylesheet" href="css/iconfont.css">
     <link rel="stylesheet" href="css/main.css">
     <script src="js/jquery-1.12.4.min.js"></script>
+    <script src="./js/jquery.twbsPagination.min.js"></script>
 </head>
 
 <body>
@@ -269,6 +270,21 @@
         <option>{{v.name}}</option>
         {{/each}}
     </script>
+    <script type="text/html" id="tempData">
+        {{each data v}}
+        <tr>
+            <td>{{v.title}}</td>
+            <td>{{v.author}}</td>
+            <td>{{v.type}}</td>
+            <td class="text-center">{{v.date}}</td>
+            <td class="text-center">{{v.state}}</td>
+            <td class="text-center">
+                <a href="article_edit.html" class="btn btn-default btn-xs">编辑</a>
+                <a href="javascript:deleteTr( 1005 );" class="btn btn-danger btn-xs">删除</a>
+            </td>
+        </tr>
+        {{/each}}
+    </script>
     <script>
         // 设置左侧菜单
         $('#release_btn').click(function() {
@@ -282,11 +298,55 @@
                 url: 'http://localhost:8000/admin/category_search',
                 type: "get",
                 success: function(backData) {
-                    console.log(backData);
+                    // console.log(backData);
                     var html = template('temp', backData)
                     $("#selCategory").append(html)
                 }
             })
+
+            //获取分页数据
+            // 请求地址：<http://localhost:8000/admin/search>
+            // 请求方式：get
+            // 请求参数：page,perpage
+            // 步骤
+            // 1. 进入文章列表页之后，通过ajax获取分页文章数据
+            // 2. page&perpage 第一页，每页6条
+            // 3. 数据回来之后渲染到页面上 模板引擎
+            var myPage = 1;
+
+            function getArticle(myPage) {
+                $.ajax({
+                    url: "http://localhost:8000/admin/search",
+                    type: 'get',
+                    data: {
+                        page: myPage,
+                        perpage: 5
+                    },
+                    success: function(backData) {
+                        console.log(backData);
+                        var html = template('tempData', backData)
+                        $('tbody').html(html)
+                    }
+                })
+            }
+            getArticle(myPage)
+
+
+            $('.pagination').twbsPagination({
+                totalPages: 35,
+                visiblePages: 7,
+                first: '首页',
+                prev: '上一页',
+                next: '下一页',
+                last: '尾页',
+                onPageClick: function(event, page) {
+                    myPage = page;
+                    getArticle(myPage);
+                    console.log(event);
+                    console.log(page);
+
+                }
+            });
         });
     </script>
 
