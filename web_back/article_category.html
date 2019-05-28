@@ -213,11 +213,7 @@
                     $.ajax({
                             url: 'http://localhost:8000/admin/category_edit',
                             type: 'post',
-                            data: {
-                                id: $('input[name = id]').val(),
-                                name: $('.cate_name').val(),
-                                slug: $('.cate_slug').val()
-                            },
+                            data: $('form').serialize(),
                             success: function(backData) {
                                 console.log(backData);
 
