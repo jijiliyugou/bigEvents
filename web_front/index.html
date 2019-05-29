@@ -215,12 +215,51 @@
             <span>|</span>
             <a href="#">招聘人才</a>
             <span>|</span>
-            <a href="#">友情链接</a>		
+            <a href="#">友情链接</a>
         </div>
-        <p>CopyRight © 2019 深圳大事件信息技术股份有限公司   All Rights Reserved</p>
-        <p>电话：0755-****888    粤ICP备*******8号</p>
+        <p>CopyRight © 2019 深圳大事件信息技术股份有限公司 All Rights Reserved</p>
+        <p>电话：0755-****888 粤ICP备*******8号</p>
     </div>
-
+    <script src="./js/jquery-1.12.4.min.js"></script>
+    <script src="./js/template-web.js"></script>
+    <script id="temp" type="text/html">
+        {{each data}} {{if $index==0}}
+        <li class="first">
+            {{else}}
+            <li>
+                {{/if}}
+                <a href="#"><img src="{{$value.cover}}" alt=""></a>
+                <p>{{$value.title}}</p>
+            </li>
+            {{/each}}
+    </script>
+    <script>
+        // 前台页面 - 首页顶部 
+        // 请求地址：<http://localhost:8000/admin/search>
+        // 请求方式：get
+        // 请求参数：page,perpage
+        // 步骤
+        // 1. 打开前台首页时 ajax获取数据
+        // 2. 获取前5条数据
+        // 3. 数据获取到之后，渲染到页面上
+        // 重点
+        // 1. 模板引擎循环渲染的时候，第一个要有first类名 结合逻辑语句实现
+        // 2. 网站前后台页面的作用
+        //    1. 前台页面：数据展示
+        //    2. 后台页面：数据的 增删改查
+        $.ajax({
+            url: 'http://localhost:8000/admin/search',
+            data: {
+                page: 1,
+                perpage: 5
+            },
+            success: function(frontData) {
+                console.log(frontData);
+                var html = template('temp', frontData)
+                $('.focus_list').html(html)
+            }
+        })
+    </script>
 </body>
 
 </html>
