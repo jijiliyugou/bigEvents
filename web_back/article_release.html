@@ -6,16 +6,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>文章列表</title>
-    <link rel="stylesheet" href="js/bootstrap/css/bootstrap.min.css">
-    <link rel="stylesheet" href="css/reset.css">
-    <link rel="stylesheet" href="css/iconfont.css">
-    <link rel="stylesheet" href="css/main.css">
-    <link type="text/css" rel="stylesheet" href="js/jedate/css/jedate.css">
-    <script src="js/jquery-1.12.4.min.js"></script>
-    <script src="js/jedate/js/jedate.js"></script>
-    <script src="js/tinymce/js/tinymce/tinymce.min.js"></script>
-    <script src="js/tinymce/js/tinymce_setup.js"></script>
+    <script src="./js/jquery-1.12.4.min.js"></script>
+    <link rel="stylesheet" href="./js/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="./css/reset.css">
+    <link rel="stylesheet" href="./css/iconfont.css">
+    <link rel="stylesheet" href="./css/main.css">
+    <link type="text/css" rel="stylesheet" href="./js/jedate/css/jedate.css">
 </head>
+<script src="./js/jedate/js/jedate.js"></script>
+<script src="./js/tinymce/js/tinymce/tinymce.min.js"></script>
+<script src="./js/tinymce/js/tinymce_setup.js"></script>
 
 <body>
     <div class="container-fluid">
@@ -27,20 +27,20 @@
                 <div class="form-group">
                     <label for="inputEmail3" class="col-sm-2 control-label">文章标题：</label>
                     <div class="col-sm-10">
-                        <input type="email" class="form-control" id="inputEmail3" placeholder="文章标题">
+                        <input type="email" class="form-control" id="inputEmail3" placeholder="文章标题" name="title">
                     </div>
                 </div>
                 <div class="form-group">
                     <label for="inputPassword3" class="col-sm-2 control-label">文章封面：</label>
                     <div class="col-sm-10">
                         <img src="" alt="" class="prev" style="width: 200px">
-                        <input type="file" id="exampleInputFile">
+                        <input type="file" id="exampleInputFile" name="cover">
                     </div>
                 </div>
                 <div class="form-group">
                     <label for="inputEmail3" class="col-sm-2 control-label">文章类别：</label>
                     <div class="col-sm-4">
-                        <select class="form-control articleTitle">
+                        <select class="form-control articleTitle" name="type">
                             
                         </select>
                     </div>
@@ -50,7 +50,7 @@
                     <div class="col-sm-4">
 
                         <div class="input-group">
-                            <input type="text" class="form-control" placeholder="YYYY-MM-DD" id="dateinput">
+                            <input type="text" class="form-control" placeholder="YYYY-MM-DD" id="dateinput" name="date">
                             <span class="input-group-btn">
                                 <button class="btn btn-default" type="button"
                                     onclick="jeDate('#dateinput',{trigger:false,format: 'YYYY-MM-DD'})"><i
@@ -62,9 +62,7 @@
                 <div class="form-group">
                     <label for="inputEmail3" class="col-sm-2 control-label">文章内容：</label>
                     <div class="col-sm-10">
-                        <textarea class="form-control" id="rich_content" name="content" placeholder="文章内容">
-                            Lorem ipsum dolor sit amet consectetur adipisicing elit. Assumenda fugiat illo nihil molestias ab. Laborum eius non atque, totam sapiente quae obcaecati assumenda ratione inventore pariatur maiores, qui libero delectus.
-                            </textarea>
+                        <textarea id="rich_content" class="form-control" placeholder="文章内容">Hello, World!</textarea>
                     </div>
                 </div>
                 <div class="form-group">
@@ -76,7 +74,6 @@
             </form>
         </div>
     </div>
-    <script src="./js/jquery-1.12.4.min.js"></script>
     <script src="./js/template-web.js"></script>
     <script type="text/html" id="temp">
         {{each data v}}
@@ -110,7 +107,34 @@
                     var html = template('temp', backData)
                     $('.articleTitle').html(html)
                 }
-            })
+            });
+
+
+            // 文章新增 - 点击新增
+            //      请求地址： < http://localhost:8000/admin/article_publish>
+            //      请求方式： post
+            //      请求参数： formData
+            //      步骤
+            //      1. 点击发布
+            //      2. 创建formData
+            //      3. ajax提交formData
+            //      4. 提交成功之后 提示用户
+            $('.btn-success').on('click', function(e) {
+                e.preventDefault();
+                var formData = new FormData($('form')[0]);
+                formData.append('state', '草稿')
+                    // formData.append('content', tinyMCE.activeEditor.getContent())
+                $.ajax({
+                    url: 'http://localhost:8000/admin/article_publish',
+                    type: "post",
+                    data: formData,
+                    contentType: false,
+                    processData: false,
+                    success: function(backData) {
+                        // console.log(backData);
+                    }
+                })
+            });
         })
     </script>
 </body>
